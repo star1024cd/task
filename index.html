@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숫자 기억 게임</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap">
+
+    <style>
+        @font-face {
+            font-family: "LeeSeoyun";
+            src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff") format("woff");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'LeeSeoyun', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: pink;
+            border: 2px solid hotpink;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            width: 700px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 50px;
+            font-weight: 900;
+            color: hotpink;
+            margin: 0px;
+        }
+
+        .main {
+            font-size: 25px;
+            font-weight: 300;
+            color: white;
+        }
+
+        #numDisplay {
+            font-size: 35px;
+        }
+
+        #user-input {
+            width: 300px;
+            text-align: center;
+            height: 40px;
+        }
+
+        .btn {
+            background-color: pink;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: hotpink;
+        }
+
+        #user-input {
+            border: 2px solid pink;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 18px;
+            color: hotpink;
+            outline: none;
+        }
+
+        #user-input::placeholder {
+            color: hotpink;
+            opacity: 0.7;
+        }
+
+        #user-input:focus {
+            border-color: hotpink;
+        }
+    </style>
+    <script type="module">
+        let saveNum = Math.floor(Math.random() * 10000);
+        let answer = true;
+        let inputNum = document.getElementById("user-input");
+        inputNum.disabled = true;
+
+        //시작버튼 눌렀을 때
+        $("#startBtn").click(async function () {
+
+            inputNum.disabled = true;
+            inputNum.value = "";
+
+            let countdownElement = document.getElementById('numTimer');
+            let countdownNumber = 3;
+
+            // 초기 3을 먼저 표시
+            countdownElement.textContent = "남은 시간 : " + countdownNumber + "초";
+
+            let countdownInterval = setInterval(function () {
+                countdownNumber--;
+                if (countdownNumber > 0) {
+                    countdownElement.textContent = "남은 시간 : " + countdownNumber + "초";
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = '💥';
+                }
+            }, 1000);
+
+            inputNum.placeholder = "3초후에 입력할 수 있습니다!";
+            document.getElementById("submitBtn").disabled = false;
+            document.getElementById("submitBtn").innerText = "제출";
+            $('.numDisplay').text(saveNum);
+            startBtn.disabled = true;
+            submitBtn.disabled = true;
+
+            setTimeout(function () {
+                $('.numDisplay').text('뭐였을까요~???ㅎㅎㅎ');
+                inputNum.disabled = false;
+                inputNum.placeholder = "이제 입력하세요!";
+                startBtn.disabled = false;
+                submitBtn.disabled = false;
+                numTimer.empty();
+            }, 3000);
+
+        })
+
+        //제출버튼 눌렀을 떄
+        $("#submitBtn").click(async function () {
+            let submitNum = $('#user-input').val();
+            document.getElementById("submitBtn").disabled = true;
+            document.getElementById("submitBtn").innerText = "다시 시작해주세용";
+            if (saveNum == submitNum) {
+                let resultMsg = `정답입니다!🎉\n 정답은 ${saveNum}입니다!`;
+                $('.numDisplay').text(resultMsg);
+                saveNum = Math.floor(Math.random() * 10000);
+                input.disabled = true;
+            } else {
+                let resultMsg = `틀렸습니다!🙄\n 정답은 ${saveNum}입니다!`;
+                $('.numDisplay').text(resultMsg);
+                answer = false;
+                saveNum = Math.floor(Math.random() * 10000);
+            }
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>숫자 기억 게임</h1>
+        <div id="numDisplay" class="numDisplay">여기에 숫자가 뜹니다.</div>
+        <div id="numTimer" class="numTimer">숫자를 외우세요! 3초후에 사라집니다.</div>
+        <div class="main">
+            <input type="text" id="user-input" class="user-input" placeholder="게임시작 후 입력하세요"></input>
+            <button id="startBtn" type="button" class="btn">시작</button>
+            <button id="submitBtn" type="button" class="btn">제출</button>
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+</body>
+
+</html>
