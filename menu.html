@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @font-face {
+            font-family: 'HancomMalangMalang-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2406-1@1.0/HancomMalangMalang-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'HancomMalangMalang-Regular', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #menu-list {
+            padding: 20px;
+            border-radius: 10px;
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            /* width: 500px; */
+        }
+
+        .card {
+            width: 100%;
+            margin: 10px;
+            width: 18rem;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-color: transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn{
+            margin: 2px;
+            border-radius: 10px;
+        }
+
+        h5 {
+            font-weight: bold;
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        #searchInput {
+            width: 310px;
+            margin-right: 10px;
+            border-radius: 20px;
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+    <script>
+        const menuItems = [
+            { name: '비빔밥', description: '밥 위에 나물, 고기, 고추장 등을 얹고 비벼 먹는 한국 요리', photo: 'https://t4.ftcdn.net/jpg/06/32/24/09/360_F_632240933_VC1uwZcPK0I1XneFW3pTAhBUNrOnCtek.jpg', category: '한식' },
+            { name: '김치찌개', description: '김치와 돼지고기 등을 넣고 끓인 한국의 찌개 요리', photo: 'https://img.bizthenaum.co.kr/data/img/1000000869/ori/1000000869_11.jpg', category: '한식' },
+            { name: '불고기', description: '양념한 고기를 구워서 먹는 한국 요리', photo: 'https://i.namu.wiki/i/1fMv9BlDolXCcO2TlBW0zuV14FbmYAQf71zBGjY8RvtoP3x-zDBo0jiQxy4gdQ8ipfOqa9NNgGc5AOPVfRHlzQ.webp', category: '한식' },
+            { name: '떡볶이', description: '떡과 어묵을 고추장 양념에 볶아 만든 한국의 간식', photo: 'https://godomall.speedycdn.net/c2cfc48e2fe771b2b577b21d9b619849/goods/1000000049/image/detail/1000000049_detail_235.jpg', category: '한식' },
+            { name: '잡채', description: '당면과 여러 채소, 고기를 볶아 만든 한국 요리', photo: 'https://i.ytimg.com/vi/wtKoaVQ4kpM/maxresdefault.jpg', category: '한식' },
+            { name: '피자', description: '밀가루로 만든 얇고 납작한 반죽에 토마토 소스와 치즈 등 토핑을 얹어서 구워 내는 이탈리아에서 시작한 요리', photo: 'https://i.namu.wiki/i/umI-heVYVS9miQNqXM13FRUOHHL4l1nzsZgN9XRLFG7nI_7Dyf-Myr6HmiWf9Qd7SAZQz3WYSQHPXXtGAwLTag.webp', category: '양식' },
+            { name: '파스타', description: '물과 듀럼밀 세몰리나를 반죽하여 만드는 이탈리아의 면과 이를 이용한 음식', photo: 'https://gi.esmplus.com/lwwin2104/%EB%9D%B5%EA%B5%B4%EB%A7%88%EC%BC%93/%EB%B0%80%ED%82%A4%ED%8A%B8/%EC%89%AC%EB%A6%BC%ED%94%84%EB%A1%9C%EC%A0%9C%ED%8C%8C%EC%8A%A4%ED%83%80/%EC%89%AC%EB%A6%BC%ED%94%84%EB%A1%9C%EC%A0%9C%ED%8C%8C%EC%8A%A4%ED%83%80_%EC%A0%9C%ED%92%88%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg', category: '양식' },
+            { name: '초밥', description: '소금과 식초, 설탕으로 간을 한 밥 위에 얇게 저민 생선이나 김, 달걀, 채소 등을 얹거나 말아 만드는 일본의 대표 요리', photo: 'https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/00/a0000370/img/basic/a0000370_main.jpg', category: '일식' },
+            { name: '타코야키', description: '밀가루 반죽에 잘게 썬 문어, 파, 양배추, 베니쇼가를 넣어 동그랗게 구워내 가쓰오부시와 소스를 뿌려 먹는 일본의 먹거리', photo: 'https://i.namu.wiki/i/xFwG0IMgL8tbzL97wAh3-P9-itTeCy2eIc_nOw1QWNwHGtgbGgEMwM0V0IovQGA9I2kB-LmxfHi-ZPSAPwpcBA.webp', category: '일식' }
+
+        ];
+
+        $(document).ready(function () {
+            //메뉴세팅
+            appendMenu(menuItems);
+
+            $('#title').click(function(){
+                window.location.reload();
+            })
+
+            //입력값 실시간으로 검색
+            let inputArea = document.getElementById('searchInput');
+            inputArea.addEventListener('input', function (event) {
+                let inputValue = event.target.value;
+                let menuFilter = menuItems.filter(menu => menu.name.includes(inputValue));
+                appendMenu(menuFilter);
+            })
+
+            //버튼 눌러서 검색          
+            $('#serachBtn').click(function () {
+                let inputValue = $('#searchInput').val().trim();
+
+                if (inputValue !== '') {
+                    //메뉴 필터링                
+                    let menuFilter = menuItems.filter(menu => menu.name.includes(inputValue));
+                    //필터링 된 메뉴를 화면에 표시
+                    appendMenu(menuFilter);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "앗 이런!!!",
+                        text: "값을 입력해주세요",
+                    });
+                }
+                //검색창 초기화
+                searchInput.value = '';
+            });
+
+            //고기        
+            $('#serachGogi').click(function () {
+                let menuFilter = menuItems.filter(menu => menu.description.includes('고기'));
+                appendMenu(menuFilter);
+            })
+
+            //카테고리별 버튼
+            $('.categoryBtn').click(function () {
+                let category = $(this).attr('data-category');
+                let menuFilter = menuItems.filter(menu => menu.category === category);
+                appendMenu(menuFilter);
+            })
+        });
+
+        //필터링 된 메뉴 붙이기
+        function appendMenu(menuFilter) {
+            $('#menu-list').empty();
+            menuFilter.forEach(menu => {
+                let temp_html = `        <div class="card" style="width: 18rem;">
+                                        <img src="${menu.photo}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${menu.name}</h5>
+                                                <p class="card-text">${menu.description}</p>
+                                            </div>
+                                        </div>`;
+                $('#menu-list').append(temp_html);
+            })
+        }
+
+        d
+
+    </script>
+</head>
+
+<body>
+    <h1 id="title">🍴MENU🍴</h1>
+    <input type="text" id="searchInput" class="form-control" placeholder="메뉴 검색"></input>
+    <div class="btn-container">        
+        <button id="serachBtn" class="btn btn-primary">검색</button>
+        <button id="serachGogi" class="btn btn-primary">고기</button>
+        <button id="serachHansik" class="categoryBtn btn btn-primary" data-category="한식">한식</button>
+        <button id="serachYangsik" class="categoryBtn btn btn-primary" data-category="양식">양식</button>
+        <button id="serachIlsik" class="categoryBtn btn btn-primary" data-category="일식">일식</button>
+    </div>
+    <ul id="menu-list">
+    </ul>
+</body>
+
+</html>
