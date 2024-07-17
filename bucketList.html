@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>버킷리스트 😎</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Hahmlet:wght@300&display=swap");
+
+        * {
+            font-family: "Hahmlet", serif;
+        }
+
+        .bg {
+            background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/bucketList/bg-grid.png');
+            background-position: center;
+            background-size: cover;
+            margin: auto;
+            width: 360px;
+        }
+
+        .title {
+            background-color: tomato;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            font-size: 32px;
+            ;
+            padding: 4px 14px;
+        }
+
+        .bucket {
+            width: 160px;
+            height: 160px;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .img1 {
+            background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/bucketList/bucket-red.png');
+        }
+
+        .img2 {
+            background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/bucketList/bucket-lightred.png');
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css"
+        href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/bucketList/sparta-bucketlist.css" />
+
+    <script>
+        // 페이지 로드 시 이전 상태 복원
+        document.addEventListener("DOMContentLoaded", (event) => {
+            const buckets = document.querySelectorAll(".bucket");
+            buckets.forEach((bucket, index) => {
+                // 로컬 스토리지에서 상태 읽기
+                const isDone = localStorage.getItem("bucket" + index) === "done";
+                if (isDone) {
+                    bucket.classList.add("done");
+                }
+            });
+            // 버킷 리스트 클릭 이벤트
+            //const buckets = document.querySelectorAll(".bucket");
+            buckets.forEach((bucket, index) => {
+                bucket.addEventListener("click", function () {
+                    // 클래스 토글
+                    bucket.classList.toggle("done");
+                    // 로컬 스토리지에 상태 저장
+                    if (bucket.classList.contains("done")) {
+                        localStorage.setItem("bucket" + index, "done");
+                    } else {
+                        localStorage.setItem("bucket" + index, "");
+                    }
+                });
+            });
+        });
+
+
+    </script>
+</head>
+
+<body class="bg center">
+    <h1 class="title-t2">2024 버킷리스트</h1>
+    <p class="msg center">올해 안에 3가지를 달성하지 못할 경우,</p>
+    <p class="msg center">친구 3명에게 치킨 기프티콘을 선물하겠습니다.</p>
+    <div class="flex-row wrap">
+        <div class="bucket img1-t2 center">HSK 5급 따기</div>
+        <div class="bucket img2-t2 center">다이어트</div>
+        <div class="bucket img1-t2 center">책 5권 읽기</div>
+        <div class="bucket img2-t2 center">웹사이트 2개 만들어보기</div>
+    </div>
+</body>
+
+</html>
